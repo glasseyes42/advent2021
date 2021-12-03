@@ -19,4 +19,11 @@ func TestOne(t *testing.T) {
 			So(result, ShouldEqual, 7)
 		})
 	})
+
+	Convey("part 2", t, func() {
+		Convey("counts increases with a sliding window", func() {
+			result := one.CountIncreasesWindowed(strings.Split(testData, "\n"))
+			So(result, ShouldEqual, 5)
+		})
+	})
 }

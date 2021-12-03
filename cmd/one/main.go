@@ -13,4 +13,5 @@ var part1 string
 
 func main() {
 	fmt.Println("Part 1:", one.CountIncreases(strings.Split(part1, "\n")))
+	fmt.Println("Part 2:", one.CountIncreasesWindowed(strings.Split(part1, "\n")))
 }
