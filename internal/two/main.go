@@ -10,6 +10,12 @@ type Position struct {
 	Horizonal int
 }
 
+type PositionWithAim struct {
+	Depth     int
+	Horizonal int
+	Aim       int
+}
+
 type instruction struct {
 	Desc   string
 	Amount int
@@ -48,6 +54,25 @@ func ProcessInstructions(lines []string) Position {
 			location.Depth -= instr.Amount
 		case "down":
 			location.Depth += instr.Amount
+		}
+	}
+
+	return location
+}
+
+func ProcessInstructionsWithAim(lines []string) PositionWithAim {
+	instructions := parseInstructions(lines)
+
+	location := PositionWithAim{}
+	for _, instr := range instructions {
+		switch instr.Desc {
+		case "forward":
+			location.Horizonal += instr.Amount
+			location.Depth += instr.Amount * location.Aim
+		case "up":
+			location.Aim -= instr.Amount
+		case "down":
+			location.Aim += instr.Amount
 		}
 	}
 
