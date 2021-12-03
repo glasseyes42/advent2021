@@ -13,4 +13,5 @@ var part1 string
 
 func main() {
 	fmt.Println("Part 1:", three.CalculateConsumption(strings.Split(part1, "\n")))
+	fmt.Println("Part 2:", three.CalculateSupport(strings.Split(part1, "\n")))
 }
