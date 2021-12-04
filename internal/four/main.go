@@ -66,3 +66,51 @@ func Bingo(file string) int {
 
 	return 0
 }
+
+func BingoLastWinner(file string) int {
+	type boardWithStatus struct {
+		Board         *Board
+		WinningNumber int
+		Skip          bool
+	}
+
+	parsed, err := ParseFile(file)
+	if err != nil {
+		panic(err)
+	}
+
+	boards := make([]*boardWithStatus, len(parsed.Boards))
+	for idx, data := range parsed.Boards {
+		board := (&Board{}).Init()
+		board.Parse(data)
+
+		boards[idx] = &boardWithStatus{
+			Board: board,
+		}
+	}
+
+	winningBoards := []*boardWithStatus{}
+	remaining := parsed.Numbers
+
+	for len(remaining) > 4 {
+		numbers := remaining[:5]
+		remaining = remaining[5:]
+
+		for _, num := range numbers {
+			for _, board := range boards {
+				if board.Skip {
+					continue
+				}
+
+				board.Board.Call(num)
+				if board.Board.CheckWon() {
+					board.WinningNumber = num
+					board.Skip = true
+					winningBoards = append(winningBoards, board)
+				}
+			}
+		}
+	}
+
+	return winningBoards[len(winningBoards)-1].Board.Score(winningBoards[len(winningBoards)-1].WinningNumber)
+}

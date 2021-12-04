@@ -53,5 +53,10 @@ func TestTwo(t *testing.T) {
 			result := four.Bingo(testData)
 			So(result, ShouldEqual, 4512)
 		})
+
+		Convey("returns correct last board score", func() {
+			result := four.BingoLastWinner(testData)
+			So(result, ShouldEqual, 1924)
+		})
 	})
 }

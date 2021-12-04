@@ -14,4 +14,7 @@ func main() {
 	part1Answer := four.Bingo(data)
 	fmt.Println("Part 1:", part1Answer)
 
+	part2Answer := four.BingoLastWinner(data)
+	fmt.Println("Part 2:", part2Answer)
+
 }
