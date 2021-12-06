@@ -13,4 +13,7 @@ var data string
 func main() {
 	part1Answer := six.ProcessDays(80, six.ParseFile(data))
 	fmt.Println("Part 1:", part1Answer)
+
+	part2Answer := six.ProcessDays(256, six.ParseFile(data))
+	fmt.Println("Part 2:", part2Answer)
 }

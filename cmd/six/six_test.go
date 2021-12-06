@@ -11,7 +11,7 @@ import (
 //go:embed data/sample.txt
 var testData string
 
-func TestTwo(t *testing.T) {
+func TestSix(t *testing.T) {
 	Convey("part 1", t, func() {
 		Convey("process a day", func() {
 			result := six.ProcessDay(six.ParseFile(testData))
@@ -23,4 +23,12 @@ func TestTwo(t *testing.T) {
 			So(result, ShouldEqual, 5934)
 		})
 	})
+
+	Convey("part 2", t, func() {
+		Convey("256 days", func() {
+			result := six.ProcessDays(256, six.ParseFile(testData))
+			So(result, ShouldEqual, 26984457539)
+		})
+	})
+
 }
