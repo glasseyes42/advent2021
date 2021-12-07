@@ -13,4 +13,7 @@ var data string
 func main() {
 	part1Answer := seven.CalcFuel(seven.ParseFile(data))
 	fmt.Println("Part 1:", part1Answer)
+
+	part2Answer := seven.CalcFuel2(seven.ParseFile(data))
+	fmt.Println("Part 2:", part2Answer)
 }

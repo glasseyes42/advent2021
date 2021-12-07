@@ -50,3 +50,34 @@ func CalcFuel(crabs []int) int {
 	}
 	return fuel
 }
+
+func calcFuelIncrForPosition(crabs []int, position int) int {
+	fuel := 0
+	for _, crab := range crabs {
+		diff := int(math.Abs(float64(crab - position)))
+
+		fuel += (diff * (diff + 1)) / 2
+	}
+	return fuel
+}
+
+func getMinMaxCrab(crabs []int) (int, int) {
+	sorted := make([]int, len(crabs))
+	copy(sorted, crabs)
+	sort.Ints(sorted)
+
+	return sorted[0], sorted[len(sorted)-1]
+}
+
+func CalcFuel2(crabs []int) int {
+	min, max := getMinMaxCrab(crabs)
+	fuel := calcFuelIncrForPosition(crabs, min)
+	for position := min + 1; position <= max; position++ {
+		result := calcFuelIncrForPosition(crabs, position)
+		if result < fuel {
+			fuel = result
+		}
+	}
+
+	return fuel
+}

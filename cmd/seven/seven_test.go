@@ -18,4 +18,11 @@ func TestSeven(t *testing.T) {
 			So(result, ShouldEqual, 37)
 		})
 	})
+
+	Convey("part 2", t, func() {
+		Convey("calc fuel", func() {
+			result := seven.CalcFuel2(seven.ParseFile(testData))
+			So(result, ShouldEqual, 168)
+		})
+	})
 }
