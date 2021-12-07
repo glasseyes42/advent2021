@@ -1,0 +1,52 @@
+package seven
+
+import (
+	"math"
+	"sort"
+	"strconv"
+	"strings"
+)
+
+func parseIntOrFail(s string) int {
+	val, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+
+	return val
+}
+
+func ParseFile(file string) []int {
+	split := strings.Split(strings.TrimSpace(file), ",")
+
+	vals := make([]int, len(split))
+
+	for idx, s := range split {
+		vals[idx] = parseIntOrFail(s)
+	}
+
+	return vals
+}
+
+func findMedian(vals []int) int {
+	sorted := make([]int, len(vals))
+	copy(sorted, vals)
+	sort.Ints(sorted)
+
+	midIdx := len(sorted) / 2
+	if midIdx%2 == 0 {
+		return (sorted[midIdx-1] + sorted[midIdx]) / 2
+	} else {
+		return sorted[midIdx]
+	}
+}
+
+func CalcFuel(crabs []int) int {
+	median := findMedian(crabs)
+	fuel := 0
+
+	for _, crab := range crabs {
+		fuel += int(math.Abs(float64(crab - median)))
+	}
+	return fuel
+}
