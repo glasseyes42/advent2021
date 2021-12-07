@@ -14,4 +14,7 @@ func main() {
 	part1Answer := five.CountPointsWithOverlap(2, five.FilterStraight(five.ParseFile(data)))
 	fmt.Println("Part 1:", part1Answer)
 
+	part2Answer := five.CountPointsWithOverlap(2, five.ParseFile(data))
+	fmt.Println("Part 2:", part2Answer)
+
 }

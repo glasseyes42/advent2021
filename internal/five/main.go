@@ -16,22 +16,32 @@ type ventLine struct {
 
 func (vl *ventLine) GetPointsAsKeys() []string {
 	points := []string{}
-	minX := vl.StartX
-	maxX := vl.EndX
-	if maxX < minX {
-		minX = vl.EndX
-		maxX = vl.StartX
+	xIncr := 1
+	yIncr := 1
+	if vl.EndX < vl.StartX {
+		xIncr = -1
 	}
-	minY := vl.StartY
-	maxY := vl.EndY
-	if maxY < minY {
-		minY = vl.EndY
-		maxY = vl.StartY
+	if vl.EndY < vl.StartY {
+		yIncr = -1
 	}
-	for i := minX; i <= maxX; i++ {
-		for j := minY; j <= maxY; j++ {
-			points = append(points, fmt.Sprintf("%d,%d", i, j))
+
+	currentX := vl.StartX
+	currentY := vl.StartY
+	completedX := false
+	completedY := false
+	for !(completedX && completedY) {
+		points = append(points, fmt.Sprintf("%d,%d", currentX, currentY))
+		if currentX != vl.EndX {
+			currentX += xIncr
+		} else {
+			completedX = true
 		}
+		if currentY != vl.EndY {
+			currentY += yIncr
+		} else {
+			completedY = true
+		}
+
 	}
 
 	return points
