@@ -13,9 +13,16 @@ var testData string
 
 func TestNine(t *testing.T) {
 	Convey("part 1", t, func() {
-		Convey("part1", func() {
+		Convey("count low levels", func() {
 			result := nine.RiskOfLowLevels(testData)
 			So(result, ShouldEqual, 15)
+		})
+	})
+
+	Convey("part 2", t, func() {
+		Convey("largest basin size", func() {
+			result := nine.LargestBasins(testData)
+			So(result, ShouldEqual, 1134)
 		})
 	})
 }

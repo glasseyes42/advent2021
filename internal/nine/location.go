@@ -30,3 +30,42 @@ func (l *location) IsLowPoint() bool {
 
 	return isLow
 }
+
+func checkIfContains(list []*location, l *location) bool {
+	for _, existing := range list {
+		if existing == l {
+			return true
+		}
+	}
+	return false
+}
+
+func (l *location) DiscoverBasinEdges(soFar []*location) []*location {
+	list := make([]*location, len(soFar))
+	copy(list, soFar)
+
+	if l.Above != nil && l.Above.Value < 9 && !checkIfContains(list, l.Above) {
+		list = append(list, l.Above)
+		list = l.Above.DiscoverBasinEdges(list)
+	}
+	if l.Below != nil && l.Below.Value < 9 && !checkIfContains(list, l.Below) {
+		list = append(list, l.Below)
+		list = l.Below.DiscoverBasinEdges(list)
+	}
+	if l.Left != nil && l.Left.Value < 9 && !checkIfContains(list, l.Left) {
+		list = append(list, l.Left)
+		list = l.Left.DiscoverBasinEdges(list)
+	}
+	if l.Right != nil && l.Right.Value < 9 && !checkIfContains(list, l.Right) {
+		list = append(list, l.Right)
+		list = l.Right.DiscoverBasinEdges(list)
+	}
+
+	return list
+}
+
+func (l *location) BasinSize() int {
+	list := l.DiscoverBasinEdges([]*location{l})
+
+	return len(list)
+}

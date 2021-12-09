@@ -1,6 +1,7 @@
 package nine
 
 import (
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -59,4 +60,25 @@ func RiskOfLowLevels(file string) int {
 	}
 
 	return sum
+}
+
+func LargestBasins(file string) int {
+	grid := parseFile(file)
+	lowPoints := []*location{}
+
+	for _, line := range grid {
+		for _, loc := range line {
+			if loc.IsLowPoint() {
+				lowPoints = append(lowPoints, loc)
+			}
+		}
+	}
+
+	basins := make([]int, len(lowPoints))
+	for idx, l := range lowPoints {
+		basins[idx] = l.BasinSize()
+	}
+
+	sort.Ints(basins)
+	return basins[len(basins)-1] * basins[len(basins)-2] * basins[len(basins)-3]
 }
