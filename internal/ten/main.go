@@ -2,6 +2,7 @@ package ten
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -10,6 +11,13 @@ var scores = map[string]int{
 	"]": 57,
 	"}": 1197,
 	">": 25137,
+}
+
+var completionScores = map[string]int{
+	")": 1,
+	"]": 2,
+	"}": 3,
+	">": 4,
 }
 
 var pairs = map[string]string{
@@ -32,6 +40,7 @@ func isClose(s string) bool {
 type Chunk struct {
 	OpeningChar string
 	Chunks      []*Chunk
+	Closed      bool
 }
 
 func (c *Chunk) Parse(tokens []string) ([]string, error) {
@@ -40,6 +49,7 @@ func (c *Chunk) Parse(tokens []string) ([]string, error) {
 
 	for len(rest) > 0 {
 		if rest[0] == pairs[c.OpeningChar] {
+			c.Closed = true
 			return rest[1:], nil
 		}
 
@@ -59,6 +69,22 @@ func (c *Chunk) Parse(tokens []string) ([]string, error) {
 	return rest, nil
 }
 
+func (c *Chunk) Complete() []string {
+	if c.Closed {
+		return []string{}
+	}
+
+	completions := []string{}
+
+	for _, inner := range c.Chunks {
+		completions = append(completions, inner.Complete()...)
+	}
+
+	completions = append(completions, []string{pairs[c.OpeningChar]}...)
+
+	return completions
+}
+
 func (c *Chunk) String(indent int) string {
 	output := fmt.Sprintf("%s\n", c.OpeningChar)
 
@@ -69,6 +95,13 @@ func (c *Chunk) String(indent int) string {
 		}
 
 		output = fmt.Sprintf("%s\n%s | => %s", output, indentStr, inner.String(indent+1))
+	}
+	if c.Closed {
+		indentStr := "   "
+		for i := 0; i < indent; i++ {
+			indentStr = fmt.Sprintf("%s ", indentStr)
+		}
+		output = fmt.Sprintf("%s\n%s | <= %s", output, indentStr, pairs[c.OpeningChar])
 	}
 	return output
 }
@@ -93,6 +126,16 @@ func (p *Program) Parse(tokens []string) error {
 	}
 
 	return nil
+}
+
+func (p *Program) Complete() []string {
+	output := []string{}
+	for _, c := range p.Chunks {
+		if !c.Closed {
+			output = append(output, c.Complete()...)
+		}
+	}
+	return output
 }
 
 func (p *Program) String() string {
@@ -123,4 +166,28 @@ func ScoreIllegalLines(file string) int {
 		}
 	}
 	return score
+}
+
+func ScoreCompletions(file string) int {
+	lines := strings.Split(strings.TrimSpace(file), "\n")
+	lineScores := []int{}
+
+	for _, line := range lines {
+		p, err := Parse(line)
+		if err == nil {
+			completions := p.Complete()
+			score := 0
+
+			for _, c := range completions {
+				score = score * 5
+				score += completionScores[c]
+			}
+
+			lineScores = append(lineScores, score)
+		}
+	}
+
+	sort.Ints(lineScores)
+
+	return lineScores[len(lineScores)/2]
 }

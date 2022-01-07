@@ -13,4 +13,7 @@ var data string
 func main() {
 	part1Answer := ten.ScoreIllegalLines(data)
 	fmt.Println("Part 1:", part1Answer)
+
+	part2Answer := ten.ScoreCompletions(data)
+	fmt.Println("Part 2:", part2Answer)
 }

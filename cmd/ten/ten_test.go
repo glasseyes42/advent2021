@@ -38,4 +38,38 @@ func TestTen(t *testing.T) {
 		So(result, ShouldEqual, 26397)
 	})
 
+	Convey("completions", t, func() {
+		Convey("completes something simple", func() {
+			p, err := ten.Parse("[")
+			So(err, ShouldBeNil)
+			result := p.Complete()
+			So(result, ShouldResemble, []string{"]"})
+		})
+
+		Convey("completes something nested", func() {
+			p, err := ten.Parse("[()<")
+			So(err, ShouldBeNil)
+			result := p.Complete()
+			So(result, ShouldResemble, []string{">", "]"})
+		})
+
+		Convey("completes a valid line", func() {
+			p, err := ten.Parse("[({(<(())[]>[[{[]{<()<>>")
+			So(err, ShouldBeNil)
+			result := p.Complete()
+			So(result, ShouldResemble, []string{"}", "}", "]", "]", ")", "}", ")", "]"})
+		})
+
+		Convey("completes a valid line - 2", func() {
+			p, err := ten.Parse("[(()[<>])]({[<{<<[]>>(")
+			So(err, ShouldBeNil)
+			result := p.Complete()
+			So(result, ShouldResemble, []string{")", "}", ">", "]", "}", ")"})
+		})
+	})
+
+	Convey("part 2", t, func() {
+		result := ten.ScoreCompletions(testData)
+		So(result, ShouldEqual, 288957)
+	})
 }
