@@ -11,7 +11,7 @@ import (
 //go:embed data/sample.txt
 var testData string
 
-func TestSix(t *testing.T) {
+func TestTwentyFive(t *testing.T) {
 	Convey("part 1", t, func() {
 		Convey("map is linked correctly", func() {
 			seed := twentyfive.ParseFile(testData)
