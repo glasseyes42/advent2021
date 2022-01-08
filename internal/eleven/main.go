@@ -12,16 +12,24 @@ type Grid struct {
 	Counter    *Counter
 }
 
-func (g *Grid) Iteration() {
+func (g *Grid) Iteration() bool {
 	for _, o := range g.octopiList {
 		o.AddEnergy()
+	}
+
+	allFlashed := true
+
+	for _, o := range g.octopiList {
+		allFlashed = allFlashed && o.flashed
 	}
 
 	for _, o := range g.octopiList {
 		o.ResetFlash()
 	}
+
 	fmt.Println()
 	fmt.Println(g)
+	return allFlashed
 }
 
 func (g *Grid) String() string {
@@ -76,4 +84,17 @@ func Iterate(g Grid, iterations int) int {
 	}
 
 	return g.Counter.Count()
+}
+
+func IterateTillAllFlash(g Grid) int {
+	iteration := 0
+	allFlashed := false
+
+	for !allFlashed {
+		iteration++
+		fmt.Println("iteration", iteration)
+		allFlashed = g.Iteration()
+	}
+
+	return iteration
 }

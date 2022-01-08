@@ -18,6 +18,10 @@ func TestTen(t *testing.T) {
 
 		result = eleven.Iterate(eleven.BuildGrid(testData), 100)
 		So(result, ShouldEqual, 1656)
+	})
 
+	Convey("part 2", t, func() {
+		result := eleven.IterateTillAllFlash(eleven.BuildGrid(testData))
+		So(result, ShouldEqual, 195)
 	})
 }
